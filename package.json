@@ -1,6 +1,21 @@
 {
+  "name": "google-script-proxy",
+  "version": "1.0.0",
+  "description": "Proxy to allow Google Apps Script to bypass CORS or User-Agent restrictions",
+  "main": "proxy.js",
+  "scripts": {
+    "start": "node proxy.js"
+  },
+  "keywords": [
+    "proxy",
+    "google-apps-script",
+    "cors",
+    "bypass"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
   "dependencies": {
-    "express": "^5.1.0",
-    "node-fetch": "^3.3.2"
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6"
   }
 }
