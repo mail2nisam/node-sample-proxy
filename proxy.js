@@ -2,29 +2,19 @@ const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
-const PORT = 3000;
 
-// Target Rails URL
-const target = 'https://sco-stage.cru.org';
+app.use('/child_form_approval', createProxyMiddleware({
+  target: 'https://sco-stage.cru.org',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/child_form_approval': '/child_form_approval'
+  },
+  onProxyReq(proxyReq, req, res) {
+    proxyReq.setHeader('User-Agent', 'Mozilla/5.0'); // Override GAS User-Agent
+  }
+}));
 
-app.use(
-  '*',
-  createProxyMiddleware({
-    target,
-    changeOrigin: true,
-    onProxyReq: (proxyReq, req, res) => {
-      proxyReq.setHeader('User-Agent', 'Google Apps Script');
-    },
-    onError: (err, req, res) => {
-      console.error('Proxy error:', err);
-      res.writeHead(500, {
-        'Content-Type': 'text/plain',
-      });
-      res.end('Something went wrong. Proxy error.');
-    },
-  })
-);
-
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Proxy server listening at http://localhost:${PORT}`);
+  console.log(`Proxy listening on port ${PORT}`);
 });
